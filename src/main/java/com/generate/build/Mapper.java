@@ -20,7 +20,7 @@ public class Mapper {
             StringBuilder sb = new StringBuilder();
             sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
             sb.append("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\" >\n");
-            sb.append("<mapper namespace=\"\">\n\n");
+            sb.append("<mapper namespace=\"").append(map.get("class")).append("Dao\">\n\n");
             select(name, map, sb);
             sb.append("</mapper>");
             byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);

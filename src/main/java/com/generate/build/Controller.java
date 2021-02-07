@@ -15,6 +15,8 @@ public class Controller {
         File file = new File(path);
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             StringBuilder sb = new StringBuilder();
+            sb.append("import com.alibaba.fastjson.JSONObject;\n");
+            sb.append("import ").append(map.get("class")).append(";\n\n");
             sb.append("@RestController\n");
             sb.append("@RequestMapping(\"/").append(camel).append("\")\n");
             sb.append("public class ").append(name).append("Controller {\n\n");

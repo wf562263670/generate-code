@@ -15,6 +15,7 @@ public class Dao {
         File file = new File(path);
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             StringBuilder sb = new StringBuilder();
+            sb.append("import ").append(map.get("class")).append(";\n\n");
             sb.append("public interface ").append(name).append("Dao {\n\n");
             sb.append("    ").append(name).append(" get").append(name).append("(").append(name).append(" bean);\n\n");
             sb.append("    List<").append(name).append("> get").append(name).append("List(").append(name).append(" bean);\n\n");

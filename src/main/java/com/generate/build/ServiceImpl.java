@@ -18,6 +18,7 @@ public class ServiceImpl {
         File file = new File(path);
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             StringBuilder sb = new StringBuilder();
+            sb.append("import ").append(map.get("class")).append(";\n\n");
             sb.append("@Service\n");
             sb.append("public class ").append(name).append("ServiceImpl  implements ").append(name).append("Service{\n\n");
             sb.append("    @Autowired\n");

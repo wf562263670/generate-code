@@ -16,6 +16,7 @@ public class Service {
         File file = new File(path);
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             StringBuilder sb = new StringBuilder();
+            sb.append("import ").append(map.get("class")).append(";\n\n");
             sb.append("public interface ").append(name).append("Service {\n\n");
             sb.append("    PageInfo<").append(name).append("> get").append(name).append("ByPage(int pageNum,int pageSize,").append(name).append(" bean);\n\n");
             sb.append("}");

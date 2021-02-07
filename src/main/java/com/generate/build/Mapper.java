@@ -32,17 +32,18 @@ public class Mapper {
 
     public static void select(String name, Map<String, Object> map, StringBuilder sb) {
         String tableName = map.get("tableName").toString();
+        String camel = CamelMapping.parseCamel(tableName);
         String clazzPath = map.get("class").toString();
         sb.append("    <select id=\"get").append(name).append("\" parameterType=\"").append(clazzPath).append("\" resultType=\"").append(clazzPath).append("\">\n");
         sb.append("        SELECT ");
         field(map, sb);
-        sb.append(" FROM `").append(CamelMapping.parseCamel(tableName)).append("`\n");
+        sb.append(" FROM `").append(camel).append("`\n");
         ifElse(map, sb);
         sb.append("    </select>\n\n");
         sb.append("    <select id=\"get").append(name).append("List\" parameterType=\"").append(clazzPath).append("\" resultType=\"").append(clazzPath).append("\">\n");
         sb.append("        SELECT ");
         field(map, sb);
-        sb.append(" FROM `").append(tableName).append("`\n");
+        sb.append(" FROM `").append(camel).append("`\n");
         ifElse(map, sb);
         sb.append("    </select>\n\n");
     }

@@ -16,13 +16,14 @@ public class Controller {
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             StringBuilder sb = new StringBuilder();
             sb.append("@RestController\n");
-            sb.append("@RequestMapping(\"/").append(name).append("\")\n");
+            sb.append("@RequestMapping(\"/").append(camel).append("\")\n");
             sb.append("public class ").append(name).append("Controller {\n\n");
             sb.append("    @Autowired\n");
             sb.append("    private ").append(name).append("Dao ").append(camel).append("Dao;\n\n");
             sb.append("    @Autowired\n");
             sb.append("    private ").append(name).append("Service ").append(camel).append("Service;\n\n");
             page(name, sb);
+            select(name, sb);
             sb.append("}");
             byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
             outputStream.write(data);
@@ -47,6 +48,28 @@ public class Controller {
         sb.append("        int pageSize = Integer.parseInt(map.get(\"pageSize\").toString());\n");
         sb.append("        ").append(name).append(" bean = JSONUtil.parseObject(jsonObject,").append(name).append(".class);\n");
         sb.append("        return ").append(camel).append("Service.get").append(name).append("ByPage(pageNum,pageSize,bean);\n");
+        sb.append("    }\n\n");
+    }
+
+    public static void select(String name, StringBuilder sb) {
+        String camel = CamelMapping.toLowerCaseFirstOne(name);
+        sb.append("    @GetMapping(\"/get").append(name).append("\")\n");
+        sb.append("    public ").append(name).append(" get").append(name).append("(HttpServletRequest request){\n");
+        sb.append("        ").append(name).append(" bean = WebUtil.parseObject(request,").append(name).append(".class);\n");
+        sb.append("        return ").append(camel).append("Dao.get").append(name).append("(bean);\n");
+        sb.append("    }\n\n");
+        sb.append("    @PostMapping(\"/get").append(name).append("\")\n");
+        sb.append("    public ").append(name).append(" get").append(name).append("(@RequestBody ").append(name).append(" bean){\n");
+        sb.append("        return ").append(camel).append("Dao.get").append(name).append("(bean);\n");
+        sb.append("    }\n\n");
+        sb.append("    @GetMapping(\"/getList\")\n");
+        sb.append("    public List<").append(name).append("> getList(HttpServletRequest request){\n");
+        sb.append("        ").append(name).append(" bean = WebUtil.parseObject(request,").append(name).append(".class);\n");
+        sb.append("        return ").append(camel).append("Dao.get").append(name).append("List(bean);\n");
+        sb.append("    }\n\n");
+        sb.append("    @PostMapping(\"/getList\")\n");
+        sb.append("    public List<").append(name).append("> getList(@RequestBody ").append(name).append(" bean){\n");
+        sb.append("        return ").append(camel).append("Dao.get").append(name).append("List(bean);\n");
         sb.append("    }\n\n");
     }
 

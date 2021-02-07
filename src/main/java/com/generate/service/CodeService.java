@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExecuteService {
+public class CodeService {
 
     public static Map<String, Object> getClassInfo(Class<?> clazz) {
         Map<String, Object> data = new HashMap<>();

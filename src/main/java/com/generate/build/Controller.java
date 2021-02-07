@@ -1,0 +1,53 @@
+package com.generate.build;
+
+import com.generate.mapping.CamelMapping;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
+public class Controller {
+
+    public static void write(String path, Map<String, Object> map) {
+        String name = map.get("name").toString();
+        String camel = CamelMapping.toLowerCaseFirstOne(name);
+        path += name + "Controller.java";
+        File file = new File(path);
+        try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("@RestController\n");
+            sb.append("@RequestMapping(\"/").append(name).append("\")\n");
+            sb.append("public class ").append(name).append("Controller {\n\n");
+            sb.append("    @Autowired\n");
+            sb.append("    private ").append(name).append("Dao ").append(camel).append("Dao;\n\n");
+            sb.append("    @Autowired\n");
+            sb.append("    private ").append(name).append("Service ").append(camel).append("Service;\n\n");
+            page(name, sb);
+            sb.append("}");
+            byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
+            outputStream.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void page(String name, StringBuilder sb) {
+        String camel = CamelMapping.toLowerCaseFirstOne(name);
+        sb.append("    @GetMapping(\"/get").append(name).append("ByPage\")\n");
+        sb.append("    public PageInfo<").append(name).append("> get").append(name).append("ByPage(HttpServletRequest request){\n");
+        sb.append("        int pageNum = Integer.parseInt(request.getParameter(\"pageNum\"));\n");
+        sb.append("        int pageSize = Integer.parseInt(request.getParameter(\"pageSize\"));\n");
+        sb.append("        ").append(name).append(" bean = WebUtil.parseObject(request,").append(name).append(".class);\n");
+        sb.append("        return ").append(camel).append("Service.get").append(name).append("ByPage(pageNum,pageSize,bean);\n");
+        sb.append("    }\n\n");
+        sb.append("    @PostMapping(\"/get").append(name).append("ByPage\")\n");
+        sb.append("    public PageInfo<").append(name).append("> get").append(name).append("ByPage(@RequestBody JSONObject jsonObject){\n");
+        sb.append("        Map<String, Object> map = JSONUtil.parseJSON(jsonObject);\n");
+        sb.append("        int pageNum = Integer.parseInt(map.get(\"pageNum\").toString());\n");
+        sb.append("        int pageSize = Integer.parseInt(map.get(\"pageSize\").toString());\n");
+        sb.append("        ").append(name).append(" bean = JSONUtil.parseObject(jsonObject,").append(name).append(".class);\n");
+        sb.append("        return ").append(camel).append("Service.get").append(name).append("ByPage(pageNum,pageSize,bean);\n");
+        sb.append("    }\n\n");
+    }
+
+}

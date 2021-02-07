@@ -10,7 +10,7 @@ public class CodeService {
 
     public static Map<String, Object> getClassInfo(Class<?> clazz) {
         Map<String, Object> data = new HashMap<>();
-        String name = null;
+        String name = clazz.getSimpleName();
         if (clazz.isAnnotationPresent(Table.class)) {
             Table table = clazz.getAnnotation(Table.class);
             name = table.name();

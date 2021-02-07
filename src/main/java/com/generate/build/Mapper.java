@@ -36,7 +36,7 @@ public class Mapper {
         sb.append("    <select id=\"get").append(name).append("\" parameterType=\"").append(clazzPath).append("\" resultType=\"").append(clazzPath).append("\">\n");
         sb.append("        SELECT ");
         field(map, sb);
-        sb.append(" FROM `").append(tableName).append("`\n");
+        sb.append(" FROM `").append(CamelMapping.parseCamel(tableName)).append("`\n");
         ifElse(map, sb);
         sb.append("    </select>\n\n");
         sb.append("    <select id=\"get").append(name).append("List\" parameterType=\"").append(clazzPath).append("\" resultType=\"").append(clazzPath).append("\">\n");

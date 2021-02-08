@@ -133,10 +133,11 @@ public class Mapper {
             name = field.getName();
             camel = CamelMapping.parseCamel(name);
             sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n");
-            sb.append("            ").append(camel);
-            if (i < length - 1) {
+            sb.append("            ");
+            if (i > 0) {
                 sb.append(",");
             }
+            sb.append(camel);
             sb.append("\n        </if>\n");
         }
     }
@@ -149,10 +150,11 @@ public class Mapper {
             field = fields[i];
             name = field.getName();
             sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n");
-            sb.append("            #{").append(name).append("}");
-            if (i < length - 1) {
+            sb.append("            ");
+            if (i > 0) {
                 sb.append(",");
             }
+            sb.append("#{").append(name).append("}");
             sb.append("\n        </if>\n");
         }
     }

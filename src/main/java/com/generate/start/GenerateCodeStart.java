@@ -18,4 +18,13 @@ public class GenerateCodeStart {
         Mapper.write(path, data);
     }
 
+    public static void code(Map<String, String> map, Class<?> clazz) {
+        Map<String, Object> data = CodeService.getClassInfo(clazz);
+        Controller.write(map.get("controller"), data);
+        Dao.write(map.get("dao"), data);
+        Service.write(map.get("service"), data);
+        ServiceImpl.write(map.get("serviceImpl"), data);
+        Mapper.write(map.get("mapper"), data);
+    }
+
 }

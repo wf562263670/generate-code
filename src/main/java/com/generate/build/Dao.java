@@ -31,22 +31,42 @@ public class Dao {
     }
 
     public static void selectOne(String name, StringBuilder sb) {
+        sb.append("    /**\n" +
+                "     * selectOne\n" +
+                "     * 查询单个\n" +
+                "     */\n");
         sb.append("    ").append(name).append(" get").append(name).append("(").append(name).append(" bean);\n\n");
     }
 
     public static void selectList(String name, StringBuilder sb) {
+        sb.append("    /**\n" +
+                "     * selectList\n" +
+                "     * 查询列表\n" +
+                "     */\n");
         sb.append("    List<").append(name).append("> get").append(name).append("List(").append(name).append(" bean);\n\n");
     }
 
     public static void insert(String name, StringBuilder sb) {
+        sb.append("    /**\n" +
+                "     * insert\n" +
+                "     * 添加\n" +
+                "     */\n");
         sb.append("    int").append(" insert").append(name).append("(").append(name).append(" bean);\n\n");
     }
 
     public static void update(String name, StringBuilder sb) {
+        sb.append("    /**\n" +
+                "     * update\n" +
+                "     * 修改\n" +
+                "     */\n");
         sb.append("    int").append(" update").append(name).append("(").append(name).append(" bean);\n\n");
     }
 
     public static void delete(String name, StringBuilder sb) {
+        sb.append("    /**\n" +
+                "     * delete\n" +
+                "     * 删除\n" +
+                "     */\n");
         sb.append("    int").append(" delete").append(name).append("(").append(name).append(" bean);\n\n");
     }
 

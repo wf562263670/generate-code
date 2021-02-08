@@ -59,7 +59,7 @@ public class Vue {
         }
         sb.append("<el-form-item>\n" +
                 "<el-button @click=\"search(1)\" size=\"small\" type=\"primary\" icon=\"el-icon-search\">查询</el-button>\n" +
-                "<el-button @click=\"reset\" size=\"small\" type=\"primary\" icon=\"el-icon-search\">重置</el-button>\n" +
+                "<el-button @click=\"reset('query')\" size=\"small\" type=\"primary\" icon=\"el-icon-search\">重置</el-button>\n" +
                 "</el-form-item>");
         sb.append("</el-form>");
         sb.append("</div>");
@@ -101,7 +101,7 @@ public class Vue {
         Column column;
         String fieldName, remark;
         sb.append("<div>");
-        sb.append("<el-dialog title=\"添加\" :visible.sync=\"insertDialog\" width=\"30%\" @close=\"").append(camel).append("={}\">\n");
+        sb.append("<el-dialog title=\"添加\" :visible.sync=\"insertDialog\" width=\"30%\" @close=\"").append(camel).append("={}\" :close-on-click-modal=\"false\">\n");
         sb.append("<el-form :model=\"").append(camel).append("\" :rules=\"rules\" ref=\"insert\" label-width=\"100px\">");
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
@@ -114,7 +114,7 @@ public class Vue {
         sb.append("</el-form>");
         sb.append("<div align=\"center\">\n" +
                 "<el-button @click=\"add\" type=\"primary\" size=\"small\">添加</el-button>\n" +
-                "<el-button @click=\"insertDialog=false\" size=\"small\">取消</el-button>\n" +
+                "<el-button @click=\"reset('insert');insertDialog=false\" size=\"small\">取消</el-button>\n" +
                 "</div>");
         sb.append("</el-dialog>");
         sb.append("</div>");
@@ -154,8 +154,8 @@ public class Vue {
         sb.append("methods: {");
         sb.append("search(index) {\n" + "this.loading = true;this.query.pageNum = index;\n" + "axios.post('/").append(camel).append("/get").append(name).append("ByPage', this.query).then(res => {\n")
                 .append("this.tableData = res.data.list;this.total = res.data.total;this.loading = false;\n").append("});\n").append("},\n");
-        sb.append("reset() {\n" +
-                "this.$refs['query'].resetFields();\n" +
+        sb.append("reset(formName) {\n" +
+                "this.$refs[formName].resetFields();\n" +
                 "this.search(1);\n" +
                 "},\n");
         sb.append("remove(data) {\n" + "this.$confirm('此操作将永久删除, 是否继续?', '提示', {\n" + "confirmButtonText: '确定',\n" + "cancelButtonText: '取消',\n" + "type: 'warning'\n" + "}).then(() => {\n" + "axios.post('/").append(camel).append("/delete").append(name).append("ById', data).then(res => {\n").append("if (res) {\n").append("this.$message.success('删除成功');this.search(this.query.pageNum);\n").append("} else {\n").append("this.$message.error('删除失败');\n").append("}\n").append("}).catch(error => {\n").append("this.$message.warning('服务器出现错误');\n").append("console.log(error);\n").append("});").append("}).catch(() => {\n").append("this.$message.info('取消删除');\n").append("});\n").append("},\n");

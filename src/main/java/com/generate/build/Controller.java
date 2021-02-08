@@ -26,6 +26,8 @@ public class Controller {
             sb.append("    private ").append(name).append("Service ").append(camel).append("Service;\n\n");
             page(name, sb);
             select(name, sb);
+            insert(name, sb);
+            delete(name, sb);
             sb.append("}");
             byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
             outputStream.write(data);
@@ -72,6 +74,32 @@ public class Controller {
         sb.append("    @PostMapping(\"/getList\")\n");
         sb.append("    public List<").append(name).append("> getList(@RequestBody ").append(name).append(" bean){\n");
         sb.append("        return ").append(camel).append("Dao.get").append(name).append("List(bean);\n");
+        sb.append("    }\n\n");
+    }
+
+    public static void insert(String name, StringBuilder sb) {
+        String camel = CamelMapping.toLowerCaseFirstOne(name);
+        sb.append("    @GetMapping(\"/insert").append(name).append("\")\n");
+        sb.append("    public boolean insert").append(name).append("(HttpServletRequest request){\n");
+        sb.append("        ").append(name).append(" bean = WebUtil.parseObject(request,").append(name).append(".class);\n");
+        sb.append("        return ").append(camel).append("Dao.insert").append(name).append("(bean) > 0;\n");
+        sb.append("    }\n\n");
+        sb.append("    @PostMapping(\"/insert").append(name).append("\")\n");
+        sb.append("    public boolean insert").append(name).append("(@RequestBody ").append(name).append(" bean){\n");
+        sb.append("        return ").append(camel).append("Dao.insert").append(name).append("(bean) > 0;\n");
+        sb.append("    }\n\n");
+    }
+
+    public static void delete(String name, StringBuilder sb) {
+        String camel = CamelMapping.toLowerCaseFirstOne(name);
+        sb.append("    @GetMapping(\"/delete").append(name).append("\")\n");
+        sb.append("    public boolean delete").append(name).append("(HttpServletRequest request){\n");
+        sb.append("        ").append(name).append(" bean = WebUtil.parseObject(request,").append(name).append(".class);\n");
+        sb.append("        return ").append(camel).append("Dao.delete").append(name).append("(bean) > 0;\n");
+        sb.append("    }\n\n");
+        sb.append("    @PostMapping(\"/delete").append(name).append("\")\n");
+        sb.append("    public boolean delete").append(name).append("(@RequestBody ").append(name).append(" bean){\n");
+        sb.append("        return ").append(camel).append("Dao.delete").append(name).append("(bean) > 0;\n");
         sb.append("    }\n\n");
     }
 

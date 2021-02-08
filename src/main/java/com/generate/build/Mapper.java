@@ -22,6 +22,8 @@ public class Mapper {
             sb.append("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\" >\n");
             sb.append("<mapper namespace=\"").append(map.get("class")).append("Dao\">\n\n");
             select(name, map, sb);
+            insert(name, map, sb);
+            delete(name, map, sb);
             sb.append("</mapper>");
             byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
             outputStream.write(data);
@@ -38,14 +40,51 @@ public class Mapper {
         sb.append("        SELECT ");
         field(map, sb);
         sb.append(" FROM `").append(camel).append("`\n");
-        ifElse(map, sb);
+        where(map, sb);
         sb.append("    </select>\n\n");
         sb.append("    <select id=\"get").append(name).append("List\" parameterType=\"").append(clazzPath).append("\" resultType=\"").append(clazzPath).append("\">\n");
         sb.append("        SELECT ");
         field(map, sb);
         sb.append(" FROM `").append(camel).append("`\n");
-        ifElse(map, sb);
+        where(map, sb);
         sb.append("    </select>\n\n");
+    }
+
+    public static void update(String name, Map<String, Object> map, StringBuilder sb) {
+        String tableName = map.get("tableName").toString();
+        String camel = CamelMapping.parseCamel(tableName);
+        String clazzPath = map.get("class").toString();
+        sb.append("    <update id=\"update").append(name).append("\" parameterType=\"").append(clazzPath).append("\">\n");
+        sb.append("        UPDATE `").append(camel).append("`\n");
+        sb.append("        <set>\n");
+        ifElse(map, sb);
+        sb.append("        </set>\n");
+        where(map, sb);
+        sb.append("    </update>\n\n");
+    }
+
+    public static void insert(String name, Map<String, Object> map, StringBuilder sb) {
+        String tableName = map.get("tableName").toString();
+        String camel = CamelMapping.parseCamel(tableName);
+        String clazzPath = map.get("class").toString();
+        sb.append("    <insert id=\"insert").append(name).append("\" parameterType=\"").append(clazzPath).append("\">\n");
+        sb.append("        INSERT INTO `").append(camel).append("`(\n");
+        ifElseForInsert(map, sb);
+        sb.append("        )\n        VALUES (\n");
+        ifElseForInsertValue(map, sb);
+        sb.append("        )\n");
+        sb.append("    </insert>\n\n");
+    }
+
+    public static void delete(String name, Map<String, Object> map, StringBuilder sb) {
+        String tableName = map.get("tableName").toString();
+        String camel = CamelMapping.parseCamel(tableName);
+        String clazzPath = map.get("class").toString();
+        sb.append("    <delete id=\"delete").append(name).append("\" parameterType=\"").append(clazzPath).append("\">\n");
+        sb.append("        DELETE FROM `").append(camel).append("`\n");
+        sb.append("        WHERE\n");
+        ifElse(map, sb);
+        sb.append("    </delete>\n\n");
     }
 
     public static void field(Map<String, Object> map, StringBuilder sb) {
@@ -60,15 +99,42 @@ public class Mapper {
         }
     }
 
+    public static void where(Map<String, Object> map, StringBuilder sb) {
+        sb.append("        <where>\n");
+        ifElse(map, sb);
+        sb.append("        </where>\n");
+    }
+
     public static void ifElse(Map<String, Object> map, StringBuilder sb) {
         Field[] fields = (Field[]) map.get("fields");
         String name, camel;
-        sb.append("        <where>\n");
         for (Field field : fields) {
             name = field.getName();
             camel = CamelMapping.parseCamel(name);
-            sb.append("            <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n").append("                ").append(name).append(" = #{").append(camel).append("}\n            </if>\n");
+            sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
+                    .append("        ").append(name).append(" = #{").append(camel).append("}\n            </if>\n");
         }
-        sb.append("        </where>\n");
     }
+
+    public static void ifElseForInsert(Map<String, Object> map, StringBuilder sb) {
+        Field[] fields = (Field[]) map.get("fields");
+        String name, camel;
+        for (Field field : fields) {
+            name = field.getName();
+            camel = CamelMapping.parseCamel(name);
+            sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
+                    .append("            ").append(camel).append("\n        </if>\n");
+        }
+    }
+
+    public static void ifElseForInsertValue(Map<String, Object> map, StringBuilder sb) {
+        Field[] fields = (Field[]) map.get("fields");
+        String name;
+        for (Field field : fields) {
+            name = field.getName();
+            sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
+                    .append("            #{").append(name).append("}\n        </if>\n");
+        }
+    }
+
 }

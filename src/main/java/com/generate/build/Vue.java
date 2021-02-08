@@ -30,6 +30,7 @@ public class Vue {
                     "</div>");
             table(sb, map);
             insertDialog(sb, map);
+            updateDialog(sb, map);
             sb.append("</div></template>");
             sb.append("<script>\nexport default {");
             data(sb, map);
@@ -120,6 +121,32 @@ public class Vue {
         sb.append("</div>");
     }
 
+    public static void updateDialog(StringBuilder sb, Map<String, Object> map) {
+        String name = map.get("name").toString();
+        String camel = CamelMapping.toLowerCaseFirstOne(name);
+        Field[] fields = (Field[]) map.get("fields");
+        Column column;
+        String fieldName, remark;
+        sb.append("<div>");
+        sb.append("<el-dialog title=\"修改\" :visible.sync=\"updateDialog\" width=\"30%\" @close=\"").append(camel).append("={}\" :close-on-click-modal=\"false\">\n");
+        sb.append("<el-form :model=\"").append(camel).append("\" :rules=\"rules\" ref=\"update\" label-width=\"100px\">");
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Column.class)) {
+                column = field.getAnnotation(Column.class);
+                fieldName = field.getName();
+                remark = column.remark();
+                sb.append("<el-form-item label=\"").append(remark).append("\" prop=\"").append(fieldName).append("\">\n").append("<el-input v-model=\"").append(camel).append(".").append(fieldName).append("\" style=\"width: 75%\"/>\n").append("</el-form-item>");
+            }
+        }
+        sb.append("</el-form>");
+        sb.append("<div align=\"center\">\n" +
+                "<el-button @click=\"save\" type=\"primary\" size=\"small\">添加</el-button>\n" +
+                "<el-button @click=\"reset('update');insertDialog=false\" size=\"small\">取消</el-button>\n" +
+                "</div>");
+        sb.append("</el-dialog>");
+        sb.append("</div>");
+    }
+
     public static void data(StringBuilder sb, Map<String, Object> map) {
         String name = map.get("name").toString();
         String camel = CamelMapping.toLowerCaseFirstOne(name);
@@ -128,7 +155,7 @@ public class Vue {
         String fieldName, remark;
         sb.append("data() {return {");
         sb.append("query: {\n" + "pageNum: 1,\n" + "pageSize: 7\n" + "},\n" + "total: 0,\n").append(camel).append(": {},\n")
-                .append("loading: true,\ninsertDialog: false,\n")
+                .append("loading: true,\ninsertDialog: false,\nupdateDialog :false,\n")
                 .append("tableData:[],\n").append("rules:{");
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
@@ -159,10 +186,9 @@ public class Vue {
                 "this.search(1);\n" +
                 "},\n");
         sb.append("remove(data) {\n" + "this.$confirm('此操作将永久删除, 是否继续?', '提示', {\n" + "confirmButtonText: '确定',\n" + "cancelButtonText: '取消',\n" + "type: 'warning'\n" + "}).then(() => {\n" + "axios.post('/").append(camel).append("/delete").append(name).append("ById', data).then(res => {\n").append("if (res) {\n").append("this.$message.success('删除成功');this.search(this.query.pageNum);\n").append("} else {\n").append("this.$message.error('删除失败');\n").append("}\n").append("}).catch(error => {\n").append("this.$message.warning('服务器出现错误');\n").append("console.log(error);\n").append("});").append("}).catch(() => {\n").append("this.$message.info('取消删除');\n").append("});\n").append("},\n");
-        sb.append("update(data) {\n" +
-                "console.log(data);\n" +
-                "},\n");
-        sb.append("add() {\n" + "this.$refs['insert'].validate((valid) => {\n" + "if (valid) {\n" + "axios.post('/").append(camel).append("/insert").append(name).append("', this.").append(camel).append(").then(res => {\n").append("if (res) {\n").append("this.$message.success('添加成功');\n").append("this.insertDialog = false;\n").append("this.search(1);\n").append("} else {\n").append("this.$message.error('添加失败');\n").append("}\n").append("}).catch(error => {\n").append("this.$message.warning('服务器出现错误');\n").append("console.log(error);\n").append(" });\n").append("}\n").append(" });\n").append("}");
+        sb.append("update(data) {      this.").append(camel).append(" = data;\n").append("      this.updateDialog = true;},\n");
+        sb.append("add() {\n" + "this.$refs['insert'].validate((valid) => {\n" + "if (valid) {\n" + "axios.post('/").append(camel).append("/insert").append(name).append("', this.").append(camel).append(").then(res => {\n").append("if (res) {\n").append("this.$message.success('添加成功');\n").append("this.insertDialog = false;\n").append("this.search(1);\n").append("} else {\n").append("this.$message.error('添加失败');\n").append("}\n").append("}).catch(error => {\n").append("this.$message.warning('服务器出现错误');\n").append("console.log(error);\n").append(" });\n").append("}\n").append(" });\n").append("},\n");
+        sb.append("save() {\n" + "this.$refs['update'].validate((valid) => {\n" + "if (valid) {\n" + "axios.post('/").append(camel).append("/update").append(name).append("', this.").append(camel).append(").then(res => {\n").append("if (res) {\n").append("this.$message.success('修改成功');\n").append("this.updateDialog = false;\n").append("this.search(1);\n").append("} else {\n").append("this.$message.error('修改失败');\n").append("}\n").append("}).catch(error => {\n").append("this.$message.warning('服务器出现错误');\n").append("console.log(error);\n").append(" });\n").append("}\n").append(" });\n").append("},");
         sb.append("},\n");
     }
 

@@ -27,6 +27,7 @@ public class Controller {
             page(name, sb);
             select(name, sb);
             insert(name, sb);
+            update(name, sb);
             delete(name, sb);
             sb.append("}");
             byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
@@ -87,6 +88,19 @@ public class Controller {
         sb.append("    @PostMapping(\"/insert").append(name).append("\")\n");
         sb.append("    public boolean insert").append(name).append("(@RequestBody ").append(name).append(" bean){\n");
         sb.append("        return ").append(camel).append("Dao.insert").append(name).append("(bean) > 0;\n");
+        sb.append("    }\n\n");
+    }
+
+    public static void update(String name, StringBuilder sb) {
+        String camel = CamelMapping.toLowerCaseFirstOne(name);
+        sb.append("    @GetMapping(\"/update").append(name).append("\")\n");
+        sb.append("    public boolean update").append(name).append("(HttpServletRequest request){\n");
+        sb.append("        ").append(name).append(" bean = WebUtil.parseObject(request,").append(name).append(".class);\n");
+        sb.append("        return ").append(camel).append("Dao.update").append(name).append("(bean) > 0;\n");
+        sb.append("    }\n\n");
+        sb.append("    @PostMapping(\"/update").append(name).append("\")\n");
+        sb.append("    public boolean update").append(name).append("(@RequestBody ").append(name).append(" bean){\n");
+        sb.append("        return ").append(camel).append("Dao.update").append(name).append("(bean) > 0;\n");
         sb.append("    }\n\n");
     }
 

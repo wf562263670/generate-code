@@ -20,6 +20,7 @@ public class Dao {
             selectOne(name, sb);
             selectList(name, sb);
             insert(name, sb);
+            update(name, sb);
             delete(name, sb);
             sb.append("}");
             byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
@@ -39,6 +40,10 @@ public class Dao {
 
     public static void insert(String name, StringBuilder sb) {
         sb.append("    int").append(" insert").append(name).append("(").append(name).append(" bean);\n\n");
+    }
+
+    public static void update(String name, StringBuilder sb) {
+        sb.append("    int").append(" update").append(name).append("(").append(name).append(" bean);\n\n");
     }
 
     public static void delete(String name, StringBuilder sb) {

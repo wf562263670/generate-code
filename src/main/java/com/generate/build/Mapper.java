@@ -23,6 +23,7 @@ public class Mapper {
             sb.append("<mapper namespace=\"").append(map.get("class")).append("Dao\">\n\n");
             select(name, map, sb);
             insert(name, map, sb);
+            update(name, map, sb);
             delete(name, map, sb);
             sb.append("</mapper>");
             byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
@@ -59,7 +60,8 @@ public class Mapper {
         sb.append("        <set>\n");
         ifElse(map, sb);
         sb.append("        </set>\n");
-        where(map, sb);
+        sb.append("        WHERE\n");
+        ifElseForUpdate(map, sb);
         sb.append("    </update>\n\n");
     }
 
@@ -111,8 +113,8 @@ public class Mapper {
         for (Field field : fields) {
             name = field.getName();
             camel = CamelMapping.parseCamel(name);
-            sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
-                    .append("        ").append(name).append(" = #{").append(camel).append("}\n            </if>\n");
+            sb.append("            <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
+                    .append("                ").append(camel).append(" = #{").append(name).append("}\n            </if>\n");
         }
     }
 
@@ -134,6 +136,18 @@ public class Mapper {
             name = field.getName();
             sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
                     .append("            #{").append(name).append("}\n        </if>\n");
+        }
+    }
+
+    public static void ifElseForUpdate(Map<String, Object> map, StringBuilder sb) {
+        Field[] fields = (Field[]) map.get("fields");
+        String name, camel;
+        for (Field field : fields) {
+            name = field.getName();
+            camel = CamelMapping.parseCamel(name);
+            sb.append("            <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
+                    .append("                ").append(camel).append(" = #{").append(name).append("}\n            </if>\n");
+            return;
         }
     }
 

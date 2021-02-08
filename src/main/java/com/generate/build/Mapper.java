@@ -20,7 +20,7 @@ public class Mapper {
             StringBuilder sb = new StringBuilder();
             sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
             sb.append("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\" >\n");
-            sb.append("<mapper namespace=\"").append(map.get("class")).append("Dao\">\n\n");
+            sb.append("<mapper namespace=\"\">\n\n");
             select(name, map, sb);
             insert(name, map, sb);
             update(name, map, sb);
@@ -58,10 +58,10 @@ public class Mapper {
         sb.append("    <update id=\"update").append(name).append("\" parameterType=\"").append(clazzPath).append("\">\n");
         sb.append("        UPDATE `").append(camel).append("`\n");
         sb.append("        <set>\n");
-        ifElse(map, sb);
+        ifElseForUpdate(map, sb);
         sb.append("        </set>\n");
         sb.append("        WHERE\n");
-        ifElseForUpdate(map, sb);
+        ifElseForUpdateValue(map, sb);
         sb.append("    </update>\n\n");
     }
 
@@ -110,36 +110,65 @@ public class Mapper {
     public static void ifElse(Map<String, Object> map, StringBuilder sb) {
         Field[] fields = (Field[]) map.get("fields");
         String name, camel;
-        for (Field field : fields) {
+        Field field;
+        for (int i = 0, length = fields.length; i < length; i++) {
+            field = fields[i];
             name = field.getName();
             camel = CamelMapping.parseCamel(name);
-            sb.append("            <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
-                    .append("                ").append(camel).append(" = #{").append(name).append("}\n            </if>\n");
+            sb.append("            <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n");
+            sb.append("                ");
+            if (i > 0) {
+                sb.append(" AND ");
+            }
+            sb.append(camel).append(" = #{").append(name).append("}\n            </if>\n");
         }
     }
 
     public static void ifElseForInsert(Map<String, Object> map, StringBuilder sb) {
         Field[] fields = (Field[]) map.get("fields");
         String name, camel;
-        for (Field field : fields) {
+        Field field;
+        for (int i = 0, length = fields.length; i < length; i++) {
+            field = fields[i];
             name = field.getName();
             camel = CamelMapping.parseCamel(name);
-            sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
-                    .append("            ").append(camel).append("\n        </if>\n");
+            sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n");
+            sb.append("            ").append(camel);
+            if (i < length - 1) {
+                sb.append(",");
+            }
+            sb.append("\n        </if>\n");
         }
     }
 
     public static void ifElseForInsertValue(Map<String, Object> map, StringBuilder sb) {
         Field[] fields = (Field[]) map.get("fields");
         String name;
-        for (Field field : fields) {
+        Field field;
+        for (int i = 0, length = fields.length; i < length; i++) {
+            field = fields[i];
             name = field.getName();
-            sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
-                    .append("            #{").append(name).append("}\n        </if>\n");
+            sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n");
+            sb.append("            #{").append(name).append("}");
+            if (i < length - 1) {
+                sb.append(",");
+            }
+            sb.append("\n        </if>\n");
         }
     }
 
     public static void ifElseForUpdate(Map<String, Object> map, StringBuilder sb) {
+        Field[] fields = (Field[]) map.get("fields");
+        String name, camel;
+        for (Field field : fields) {
+            name = field.getName();
+            camel = CamelMapping.parseCamel(name);
+            sb.append("            <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
+                    .append("                ").append(camel).append(" = #{").append(name).append("},\n            </if>\n");
+        }
+    }
+
+    public static void ifElseForUpdateValue(Map<String, Object> map, StringBuilder sb) {
         Field[] fields = (Field[]) map.get("fields");
         String name, camel;
         for (Field field : fields) {

@@ -115,6 +115,15 @@ public class Controller {
         sb.append("    public boolean delete").append(name).append("(@RequestBody ").append(name).append(" bean){\n");
         sb.append("        return ").append(camel).append("Dao.delete").append(name).append("(bean) > 0;\n");
         sb.append("    }\n\n");
+        sb.append("    @GetMapping(\"/delete").append(name).append("ById\")\n");
+        sb.append("    public boolean delete").append(name).append("ById(HttpServletRequest request){\n");
+        sb.append("        ").append(name).append(" bean = WebUtil.parseObject(request,").append(name).append(".class);\n");
+        sb.append("        return ").append(camel).append("Dao.delete").append(name).append("ById(bean) > 0;\n");
+        sb.append("    }\n\n");
+        sb.append("    @PostMapping(\"/delete").append(name).append("ById\")\n");
+        sb.append("    public boolean delete").append(name).append("ById(@RequestBody ").append(name).append(" bean){\n");
+        sb.append("        return ").append(camel).append("Dao.delete").append(name).append("ById(bean) > 0;\n");
+        sb.append("    }\n\n");
     }
 
 }

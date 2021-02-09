@@ -2,8 +2,6 @@ package com.generate.build;
 
 import com.generate.annotation.Column;
 import com.generate.mapping.CamelMapping;
-import com.generate.service.CodeService;
-import com.generate.test.User;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -194,9 +192,4 @@ public class Vue {
         sb.append("},\n");
     }
 
-    public static void main(String[] args) {
-        String path = "F:\\Project\\project-web\\src\\views/";
-        Map<String, Object> data = CodeService.getClassInfo(User.class);
-        write(path, data);
-    }
 }

@@ -92,6 +92,11 @@ public class Mapper {
         sb.append("        WHERE\n");
         ifElseForDeleteValue(map, sb);
         sb.append("    </delete>\n\n");
+        sb.append("    <delete id=\"delete").append(name).append("List\" parameterType=\"").append(clazzPath).append("\">\n");
+        sb.append("        DELETE FROM `").append(camel).append("`\n");
+        sb.append("        WHERE ");
+        ifElseForDeleteList(map, sb);
+        sb.append("    </delete>\n\n");
     }
 
     public static void field(Map<String, Object> map, StringBuilder sb) {
@@ -183,7 +188,7 @@ public class Mapper {
             camel = CamelMapping.parseCamel(name);
             sb.append("            <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
                     .append("                ").append(camel).append(" = #{").append(name).append("}\n            </if>\n");
-            return;
+            break;
         }
     }
 
@@ -196,8 +201,26 @@ public class Mapper {
             sb.append("            <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n");
             sb.append("                ");
             sb.append(camel).append(" = #{").append(name).append("}\n            </if>\n");
-            return;
+            break;
         }
+    }
+
+    public static void ifElseForDeleteList(Map<String, Object> map, StringBuilder sb) {
+        Field[] fields = (Field[]) map.get("fields");
+        String name, camel;
+        for (Field field : fields) {
+            name = field.getName();
+            camel = CamelMapping.parseCamel(name);
+            sb.append(camel).append(" in\n");
+            break;
+        }
+        sb.append("        <foreach item=\"item\" collection=\"list\" open=\"(\" separator=\",\" close=\")\">\n");
+        for (Field field : fields) {
+            name = field.getName();
+            sb.append("            #{item.").append(name).append("}\n");
+            break;
+        }
+        sb.append("        </foreach>\n");
     }
 
 }

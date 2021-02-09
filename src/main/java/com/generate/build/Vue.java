@@ -24,7 +24,7 @@ public class Vue {
                     "<el-form>\n" +
                     "<el-form-item>\n" +
                     "<el-button @click=\"insertDialog=true\" type=\"primary\" size=\"small\" icon=\"el-icon-plus\">添加</el-button>\n" +
-                    "<el-button type=\"danger\" size=\"small\" icon=\"el-icon-delete\">删除</el-button>\n" +
+                    "<el-button @click=\"deleteList\" type=\"danger\" size=\"small\" icon=\"el-icon-delete\">删除</el-button>\n" +
                     "</el-form-item>\n" +
                     "</el-form>\n" +
                     "</div>");
@@ -71,7 +71,7 @@ public class Vue {
         Column column;
         String name, remark;
         sb.append("<div>");
-        sb.append("<el-table :data=\"tableData\" style=\"width: 100%\" v-loading=\"loading\">");
+        sb.append("<el-table @selection-change=\"selectionChange\" :data=\"tableData\" style=\"width: 100%\" v-loading=\"loading\">");
         sb.append("<el-table-column align=\"center\" type=\"selection\" width=\"55\"/>");
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
@@ -90,7 +90,7 @@ public class Vue {
                 "</el-table-column>");
         sb.append("</el-table>");
         sb.append("<div align=\"center\" style=\"margin-top: 10px\">\n" +
-                "<el-pagination background layout=\"prev, pager, next\" :total=\"total\" @current-change=\"search\"/>\n" +
+                "<el-pagination background layout=\"prev, pager, next\" :total=\"total\" :page-size=\"query.pageSize\" @current-change=\"search\"/>\n" +
                 "</div>");
         sb.append("</div>");
     }
@@ -102,7 +102,7 @@ public class Vue {
         Column column;
         String fieldName, remark;
         sb.append("<div>");
-        sb.append("<el-dialog title=\"添加\" :visible.sync=\"insertDialog\" width=\"30%\" @close=\"").append(camel).append("={}\" :close-on-click-modal=\"false\">\n");
+        sb.append("<el-dialog title=\"添加\" :visible.sync=\"insertDialog\" top=\"5vh\" width=\"30%\" @close=\"").append(camel).append("={}\" :close-on-click-modal=\"false\">\n");
         sb.append("<el-form :model=\"").append(camel).append("\" :rules=\"rules\" ref=\"insert\" label-width=\"100px\">");
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
@@ -128,7 +128,7 @@ public class Vue {
         Column column;
         String fieldName, remark;
         sb.append("<div>");
-        sb.append("<el-dialog title=\"修改\" :visible.sync=\"updateDialog\" width=\"30%\" @close=\"").append(camel).append("={}\" :close-on-click-modal=\"false\">\n");
+        sb.append("<el-dialog title=\"修改\" :visible.sync=\"updateDialog\" top=\"5vh\" width=\"30%\" @close=\"").append(camel).append("={}\" :close-on-click-modal=\"false\">\n");
         sb.append("<el-form :model=\"").append(camel).append("\" :rules=\"rules\" ref=\"update\" label-width=\"100px\">");
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
@@ -156,7 +156,7 @@ public class Vue {
         sb.append("data() {return {");
         sb.append("query: {\n" + "pageNum: 1,\n" + "pageSize: 7\n" + "},\n" + "total: 0,\n").append(camel).append(": {},\n")
                 .append("loading: true,\ninsertDialog: false,\nupdateDialog :false,\n")
-                .append("tableData:[],\n").append("rules:{");
+                .append("tableData:[],\nmultipleSelection: [],\n").append("rules:{");
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
                 column = field.getAnnotation(Column.class);
@@ -188,7 +188,9 @@ public class Vue {
         sb.append("remove(data) {\n" + "this.$confirm('此操作将永久删除, 是否继续?', '提示', {\n" + "confirmButtonText: '确定',\n" + "cancelButtonText: '取消',\n" + "type: 'warning'\n" + "}).then(() => {\n" + "axios.post('/").append(camel).append("/delete").append(name).append("ById', data).then(res => {\n").append("if (res) {\n").append("this.$message.success('删除成功');this.search(this.query.pageNum);\n").append("} else {\n").append("this.$message.error('删除失败');\n").append("}\n").append("}).catch(error => {\n").append("this.$message.warning('服务器出现错误');\n").append("console.log(error);\n").append("});").append("}).catch(() => {\n").append("this.$message.info('取消删除');\n").append("});\n").append("},\n");
         sb.append("update(data) {      this.").append(camel).append(" = data;\n").append("      this.updateDialog = true;},\n");
         sb.append("add() {\n" + "this.$refs['insert'].validate((valid) => {\n" + "if (valid) {\n" + "axios.post('/").append(camel).append("/insert").append(name).append("', this.").append(camel).append(").then(res => {\n").append("if (res) {\n").append("this.$message.success('添加成功');\n").append("this.insertDialog = false;\n").append("this.search(1);\n").append("} else {\n").append("this.$message.error('添加失败');\n").append("}\n").append("}).catch(error => {\n").append("this.$message.warning('服务器出现错误');\n").append("console.log(error);\n").append(" });\n").append("}\n").append(" });\n").append("},\n");
-        sb.append("save() {\n" + "this.$refs['update'].validate((valid) => {\n" + "if (valid) {\n" + "axios.post('/").append(camel).append("/update").append(name).append("', this.").append(camel).append(").then(res => {\n").append("if (res) {\n").append("this.$message.success('修改成功');\n").append("this.updateDialog = false;\n").append("this.search(1);\n").append("} else {\n").append("this.$message.error('修改失败');\n").append("}\n").append("}).catch(error => {\n").append("this.$message.warning('服务器出现错误');\n").append("console.log(error);\n").append(" });\n").append("}\n").append(" });\n").append("},");
+        sb.append("save() {\n" + "this.$refs['update'].validate((valid) => {\n" + "if (valid) {\n" + "axios.post('/").append(camel).append("/update").append(name).append("', this.").append(camel).append(").then(res => {\n").append("if (res) {\n").append("this.$message.success('修改成功');\n").append("this.updateDialog = false;\n").append("this.search(1);\n").append("} else {\n").append("this.$message.error('修改失败');\n").append("}\n").append("}).catch(error => {\n").append("this.$message.warning('服务器出现错误');\n").append("console.log(error);\n").append(" });\n").append("}\n").append(" });\n").append("},\n");
+        sb.append("deleteList() {\n" + "this.$confirm('此操作将永久删除, 是否继续?', '提示', {\n" + "confirmButtonText: '确定',\n" + "cancelButtonText: '取消',\n" + "type: 'warning'\n" + "}).then(() => {\n" + "const list = this.multipleSelection;\n" + "axios.post('/").append(camel).append("/delete").append(name).append("List', list).then(res => {\n").append("if (res) {\n").append("this.search(this.query.pageNum);\n").append("}\n").append("})\n").append("}).catch(() => {\n").append("this.$message.info('取消删除');\n").append("});\n").append("},\n");
+        sb.append("selectionChange(val) {\nthis.multipleSelection = val;\n},\n");
         sb.append("},\n");
     }
 
@@ -197,6 +199,4 @@ public class Vue {
         Map<String, Object> data = CodeService.getClassInfo(User.class);
         write(path, data);
     }
-
-
 }

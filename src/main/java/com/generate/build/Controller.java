@@ -124,6 +124,10 @@ public class Controller {
         sb.append("    public boolean delete").append(name).append("ById(@RequestBody ").append(name).append(" bean){\n");
         sb.append("        return ").append(camel).append("Dao.delete").append(name).append("ById(bean) > 0;\n");
         sb.append("    }\n\n");
+        sb.append("    @PostMapping(\"/delete").append(name).append("List\")\n");
+        sb.append("    public boolean delete").append(name).append("List(@RequestBody List<").append(name).append("> list){\n");
+        sb.append("        return ").append(camel).append("Dao.delete").append(name).append("List(list) > 0;\n");
+        sb.append("    }\n\n");
     }
 
 }

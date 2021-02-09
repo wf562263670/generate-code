@@ -16,6 +16,7 @@ public class GenerateCodeStart {
         Service.write(path, data);
         ServiceImpl.write(path, data);
         Mapper.write(path, data);
+        Vue.write(path, data);
     }
 
     public static void code(Map<String, String> map, Class<?> clazz) {
@@ -25,6 +26,7 @@ public class GenerateCodeStart {
         Service.write(map.get("service"), data);
         ServiceImpl.write(map.get("serviceImpl"), data);
         Mapper.write(map.get("mapper"), data);
+        Vue.write(map.get("vue"), data);
     }
 
 }

@@ -73,6 +73,11 @@ public class Dao {
                 "     * 删除单个\n" +
                 "     */\n");
         sb.append("    int").append(" delete").append(name).append("ById(").append(name).append(" bean);\n\n");
+        sb.append("    /**\n" +
+                "     * deleteList\n" +
+                "     * 批量删除\n" +
+                "     */\n");
+        sb.append("    int").append(" delete").append(name).append("List(List<").append(name).append("> list);\n\n");
     }
 
 }

@@ -141,7 +141,7 @@ public class Vue {
         sb.append("</el-form>");
         sb.append("<div align=\"center\">\n" +
                 "<el-button @click=\"save\" type=\"primary\" size=\"small\">添加</el-button>\n" +
-                "<el-button @click=\"reset('update');insertDialog=false\" size=\"small\">取消</el-button>\n" +
+                "<el-button @click=\"reset('update');updateDialog=false\" size=\"small\">取消</el-button>\n" +
                 "</div>");
         sb.append("</el-dialog>");
         sb.append("</div>");
@@ -194,4 +194,9 @@ public class Vue {
         sb.append("},\n");
     }
 
+    public static void main(String[] args) {
+        String path = "F:\\Project\\project-web\\src\\views/";
+        Map<String, Object> data = CodeService.getClassInfo(User.class);
+        write(path, data);
+    }
 }

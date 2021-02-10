@@ -144,11 +144,11 @@ public class Mapper {
         for (int i = 0, length = fields.length; i < length; i++) {
             field = fields[i];
             column = field.getAnnotation(Column.class);
-            if (column.isAutoIncrement()) {
+            name = field.getName();
+            if (column.isAutoIncrement() || "createTime".equals(name) || "updateTime".equals(name)) {
                 count++;
                 continue;
             }
-            name = field.getName();
             camel = CamelMapping.parseCamel(name);
             sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n");
             sb.append("            ");
@@ -167,11 +167,11 @@ public class Mapper {
         for (int i = 0, length = fields.length; i < length; i++) {
             field = fields[i];
             column = field.getAnnotation(Column.class);
-            if (column.isAutoIncrement()) {
+            name = field.getName();
+            if (column.isAutoIncrement() || "createTime".equals(name) || "updateTime".equals(name)) {
                 count++;
                 continue;
             }
-            name = field.getName();
             sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n");
             sb.append("            ");
             if (i > count) {
@@ -188,6 +188,9 @@ public class Mapper {
         for (Field field : fields) {
             name = field.getName();
             camel = CamelMapping.parseCamel(name);
+            if ("createTime".equals(name) || "updateTime".equals(name)) {
+                continue;
+            }
             sb.append("            <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n")
                     .append("                ").append(camel).append(" = #{").append(name).append("},\n            </if>\n");
         }

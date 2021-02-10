@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class Mapper {
 
-    public static void write(String path, Map<String, Object> map) {
+    public static void write(String pack, String path, Map<String, Object> map) {
         String name = map.get("name").toString();
         path += name + "Mapper.xml";
         File file = new File(path);
@@ -21,7 +21,7 @@ public class Mapper {
             StringBuilder sb = new StringBuilder();
             sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
             sb.append("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\" >\n");
-            sb.append("<mapper namespace=\"\">\n\n");
+            sb.append("<mapper namespace=\"").append(pack).append(".dao.").append(name).append("Dao\">\n\n");
             select(name, map, sb);
             insert(name, map, sb);
             update(name, map, sb);

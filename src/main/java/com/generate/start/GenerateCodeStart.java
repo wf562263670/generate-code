@@ -9,14 +9,14 @@ import java.util.Map;
 
 public class GenerateCodeStart {
 
-    public static void code(String path, Class<?> clazz) {
+    public static void code(String pack, String path, Class<?> clazz) {
         Map<String, Object> data = CodeService.getClassInfo(clazz);
-//        Controller.write(path, data);
-//        Dao.write(path, data);
-//        Service.write(path, data);
-//        ServiceImpl.write(path, data);
-//        Mapper.write(path, data);
-//        Vue.write(path, data);
+        Controller.write(pack, path, data);
+        Dao.write(pack, path, data);
+        Service.write(pack, path, data);
+        ServiceImpl.write(pack, path, data);
+        Mapper.write(pack, path, data);
+        Vue.write(path, data);
     }
 
     public static void code(Map<String, String> map, Class<?> clazz) {

@@ -74,9 +74,9 @@ public class Vue {
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
                 column = field.getAnnotation(Column.class);
-                name = field.getName();
                 remark = column.remark();
                 if ("".equals(remark)) continue;
+                name = field.getName();
                 sb.append("<el-table-column align=\"center\" prop=\"").append(name).append("\" label=\"").append(column.remark()).append("\"/>");
             }
         }
@@ -158,9 +158,11 @@ public class Vue {
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
                 column = field.getAnnotation(Column.class);
-                fieldName = field.getName();
-                remark = column.remark();
-                sb.append(fieldName).append(":[{required: true, message: '请输入").append(remark).append("', trigger: 'blur'}],");
+                if (!column.isNull()) {
+                    fieldName = field.getName();
+                    remark = column.remark();
+                    sb.append(fieldName).append(":[{required: true, message: '请输入").append(remark).append("', trigger: 'blur'}],");
+                }
             }
         }
         sb.append("},\n");

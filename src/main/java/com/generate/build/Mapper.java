@@ -1,5 +1,6 @@
 package com.generate.build;
 
+import com.generate.annotation.Column;
 import com.generate.mapping.CamelMapping;
 
 import java.io.BufferedOutputStream;
@@ -138,15 +139,20 @@ public class Mapper {
         Field[] fields = (Field[]) map.get("fields");
         String name, camel;
         Field field;
+        Column column;
+        int count = 0;
         for (int i = 0, length = fields.length; i < length; i++) {
             field = fields[i];
+            column = field.getAnnotation(Column.class);
+            if (column.isAutoIncrement()) {
+                count++;
+                continue;
+            }
             name = field.getName();
             camel = CamelMapping.parseCamel(name);
             sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n");
             sb.append("            ");
-            if (i > 0) {
-                sb.append(",");
-            }
+            if (i > count) sb.append(",");
             sb.append(camel);
             sb.append("\n        </if>\n");
         }
@@ -156,12 +162,19 @@ public class Mapper {
         Field[] fields = (Field[]) map.get("fields");
         String name;
         Field field;
+        Column column;
+        int count = 0;
         for (int i = 0, length = fields.length; i < length; i++) {
             field = fields[i];
+            column = field.getAnnotation(Column.class);
+            if (column.isAutoIncrement()) {
+                count++;
+                continue;
+            }
             name = field.getName();
             sb.append("        <if test=\"").append(name).append("!=null and ").append(name).append("!=''\">\n");
             sb.append("            ");
-            if (i > 0) {
+            if (i > count) {
                 sb.append(",");
             }
             sb.append("#{").append(name).append("}");

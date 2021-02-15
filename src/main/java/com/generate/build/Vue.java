@@ -18,7 +18,7 @@ public class Vue {
             StringBuilder sb = new StringBuilder();
             sb.append("<template><div>");
             query(sb, map);
-            sb.append("<div>\n" +
+            sb.append("<div style=\"margin-top: -20px;margin-bottom: -10px\">\n" +
                     "<el-form>\n" +
                     "<el-form-item>\n" +
                     "<el-button @click=\"insertDialog=true\" type=\"primary\" size=\"small\" icon=\"el-icon-plus\">添加</el-button>\n" +
@@ -69,7 +69,7 @@ public class Vue {
         Column column;
         String name, remark;
         sb.append("<div>");
-        sb.append("<el-table @selection-change=\"selectionChange\" :data=\"tableData\" style=\"width: 100%\" v-loading=\"loading\">  :header-cell-style=\"{background:'#F8F8F9',color:'black'}\" :cell-style=\"{padding:'5px'}\"");
+        sb.append("<el-table @selection-change=\"selectionChange\" :data=\"tableData\" style=\"width: 100%\" v-loading=\"loading\">  :header-cell-style=\"{background:'#F8F8F9',color:'black',padding:'9px'}\" :cell-style=\"{padding:'10px'}\"");
         sb.append("<el-table-column align=\"center\" type=\"selection\" width=\"55\"/>");
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
@@ -82,8 +82,8 @@ public class Vue {
         }
         sb.append("<el-table-column align=\"center\" label=\"操作\">\n" +
                 "<template slot-scope=\"scope\">\n" +
-                "<el-button @click=\"update(scope.row)\" type=\"primary\" size=\"small\" icon=\"el-icon-edit\">修改</el-button>\n" +
-                "<el-button @click=\"remove(scope.row)\" type=\"danger\" size=\"small\" icon=\"el-icon-delete\">删除</el-button>\n" +
+                "<el-button @click=\"update(scope.row)\" type=\"text\" size=\"mini\" icon=\"el-icon-edit\">修改</el-button>\n" +
+                "<el-button @click=\"remove(scope.row)\" type=\"text\" style=\"color: red\" size=\"mini\" icon=\"el-icon-delete\">删除</el-button>\n" +
                 "</template>\n" +
                 "</el-table-column>");
         sb.append("</el-table>");

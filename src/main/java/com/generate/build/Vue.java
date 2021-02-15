@@ -69,7 +69,7 @@ public class Vue {
         Column column;
         String name, remark;
         sb.append("<div>");
-        sb.append("<el-table @selection-change=\"selectionChange\" :data=\"tableData\" style=\"width: 100%\" v-loading=\"loading\">  :header-cell-style=\"{background:'#F8F8F9',color:'black',padding:'9px'}\" :cell-style=\"{padding:'10px'}\"");
+        sb.append("<el-table @selection-change=\"selectionChange\" :data=\"tableData\" style=\"width: 100%\" v-loading=\"loading\"  :header-cell-style=\"{background:'#F8F8F9',color:'black',padding:'9px'}\" :cell-style=\"{padding:'7px'}\">");
         sb.append("<el-table-column align=\"center\" type=\"selection\" width=\"55\"/>");
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {

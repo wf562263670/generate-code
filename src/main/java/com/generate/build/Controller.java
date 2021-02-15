@@ -71,7 +71,7 @@ public class Controller {
         sb.append("    @GetMapping(\"/getList\")\n");
         sb.append("    public List<").append(name).append("> getList(HttpServletRequest request){\n");
         sb.append("        ").append(name).append(" bean = WebUtil.parseObject(request,").append(name).append(".class);\n");
-        sb.append("        return ").append(camel).append("Dao.get").append(name).append("List(bean);\n");
+        sb.append("        return ").append(camel).append("Dao.getList();\n");
         sb.append("    }\n\n");
         sb.append("    @PostMapping(\"/getList\")\n");
         sb.append("    public List<").append(name).append("> getList(@RequestBody ").append(name).append(" bean){\n");

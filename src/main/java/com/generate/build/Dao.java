@@ -45,6 +45,7 @@ public class Dao {
                 "     * 查询列表\n" +
                 "     */\n");
         sb.append("    List<").append(name).append("> get").append(name).append("List(").append(name).append(" bean);\n\n");
+        sb.append("    List<").append(name).append("> getList();\n\n");
     }
 
     public static void insert(String name, StringBuilder sb) {

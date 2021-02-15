@@ -50,6 +50,11 @@ public class Mapper {
         sb.append(" FROM `").append(camel).append("`\n");
         where(map, sb);
         sb.append("    </select>\n\n");
+        sb.append("    <select id=\"getList\" resultType=\"").append(clazzPath).append("\">\n");
+        sb.append("        SELECT ");
+        field(map, sb);
+        sb.append(" FROM `").append(camel).append("`\n");
+        sb.append("    </select>\n\n");
     }
 
     public static void update(String name, Map<String, Object> map, StringBuilder sb) {

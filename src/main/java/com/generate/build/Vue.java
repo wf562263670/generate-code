@@ -108,7 +108,7 @@ public class Vue {
                 fieldName = field.getName();
                 if (column.isAutoIncrement() || !"createTime".equals(fieldName) && !"updateTime".equals(fieldName)) {
                     remark = column.remark();
-                    sb.append("<el-form-item label=\"").append(remark).append("\" prop=\"").append(fieldName).append("\">\n").append("<el-input v-model=\"").append(camel).append(".").append(fieldName).append("\" placeholder=\"请输入").append(fieldName).append("\" style=\"width: 75%\"/>\n").append("</el-form-item>");
+                    sb.append("<el-form-item label=\"").append(remark).append("\" prop=\"").append(fieldName).append("\">\n").append("<el-input v-model=\"").append(camel).append(".").append(fieldName).append("\" placeholder=\"请输入").append(fieldName).append("\" size=\"small\" style=\"width: 75%\"/>\n").append("</el-form-item>");
                 }
             }
         }
@@ -136,7 +136,7 @@ public class Vue {
                 fieldName = field.getName();
                 if (column.isAutoIncrement() || !"createTime".equals(fieldName) && !"updateTime".equals(fieldName)) {
                     remark = column.remark();
-                    sb.append("<el-form-item label=\"").append(remark).append("\" prop=\"").append(fieldName).append("\">\n").append("<el-input v-model=\"").append(camel).append(".").append(fieldName).append("\" placeholder=\"请输入").append(fieldName).append("\" style=\"width: 75%\"/>\n").append("</el-form-item>");
+                    sb.append("<el-form-item label=\"").append(remark).append("\" prop=\"").append(fieldName).append("\">\n").append("<el-input v-model=\"").append(camel).append(".").append(fieldName).append("\" placeholder=\"请输入").append(fieldName).append("\" size=\"small\" style=\"width: 75%\"/>\n").append("</el-form-item>");
                 }
             }
         }

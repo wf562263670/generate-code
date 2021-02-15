@@ -18,11 +18,11 @@ public class Vue {
             StringBuilder sb = new StringBuilder();
             sb.append("<template><div>");
             query(sb, map);
-            sb.append("<div style=\"margin-top: -20px;margin-bottom: -10px\">\n" +
+            sb.append("<div style=\"margin-top: -10px;margin-bottom: -10px\">\n" +
                     "<el-form>\n" +
                     "<el-form-item>\n" +
-                    "<el-button @click=\"insertDialog=true\" type=\"primary\" size=\"small\" icon=\"el-icon-plus\">添加</el-button>\n" +
-                    "<el-button @click=\"deleteList\" type=\"danger\" size=\"small\" icon=\"el-icon-delete\">删除</el-button>\n" +
+                    "<el-button @click=\"insertDialog=true\" type=\"primary\" size=\"mini\" icon=\"el-icon-plus\">添加</el-button>\n" +
+                    "<el-button @click=\"deleteList\" type=\"danger\" size=\"mini\" icon=\"el-icon-delete\">删除</el-button>\n" +
                     "</el-form-item>\n" +
                     "</el-form>\n" +
                     "</div>");
@@ -52,13 +52,13 @@ public class Vue {
             if (field.isAnnotationPresent(Column.class)) {
                 column = field.getAnnotation(Column.class);
                 name = field.getName();
-                sb.append("<el-form-item label=\"").append(column.remark()).append("\" prop=\"").append(name).append("\">\n").append("<el-input v-model=\"query.").append(name).append("\" placeholder=\"请输入").append(column.remark()).append("\" @keyup.enter.native=\"search\" size=\"small\" clearable style=\"width: 90%\"/>\n")
+                sb.append("<el-form-item label=\"").append(column.remark()).append("\" prop=\"").append(name).append("\">\n").append("<el-input v-model=\"query.").append(name).append("\" placeholder=\"请输入").append(column.remark()).append("\" @keyup.enter.native=\"search\" size=\"mini\" clearable style=\"width: 90%\"/>\n")
                         .append("</el-form-item>");
             }
         }
         sb.append("<el-form-item>\n" +
-                "<el-button @click=\"search(1)\" size=\"small\" type=\"primary\" icon=\"el-icon-search\">查询</el-button>\n" +
-                "<el-button @click=\"reset('query')\" size=\"small\" type=\"primary\" icon=\"el-icon-search\">重置</el-button>\n" +
+                "<el-button @click=\"search(1)\" size=\"mini\" type=\"primary\" icon=\"el-icon-search\">查询</el-button>\n" +
+                "<el-button @click=\"reset('query')\" size=\"mini\" type=\"primary\" icon=\"el-icon-search\">重置</el-button>\n" +
                 "</el-form-item>");
         sb.append("</el-form>");
         sb.append("</div>");

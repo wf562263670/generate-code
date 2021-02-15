@@ -52,7 +52,7 @@ public class Vue {
             if (field.isAnnotationPresent(Column.class)) {
                 column = field.getAnnotation(Column.class);
                 name = field.getName();
-                sb.append("<el-form-item label=\"").append(column.remark()).append("\" prop=\"").append(name).append("\">\n").append("<el-input v-model=\"query.").append(name).append("\" placeholder=\"请输入").append(column.remark()).append("\" @keyup.enter.native=\"search\" size=\"small\" clearable/>\n")
+                sb.append("<el-form-item label=\"").append(column.remark()).append("\" prop=\"").append(name).append("\">\n").append("<el-input v-model=\"query.").append(name).append("\" placeholder=\"请输入").append(column.remark()).append("\" @keyup.enter.native=\"search\" size=\"small\" clearable style=\"width: 90%\"/>\n")
                         .append("</el-form-item>");
             }
         }

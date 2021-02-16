@@ -51,6 +51,7 @@ public class Vue {
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
                 column = field.getAnnotation(Column.class);
+                if (column.isAutoIncrement()) continue;
                 name = field.getName();
                 sb.append("<el-form-item label=\"").append(column.remark()).append("\" prop=\"").append(name).append("\">\n").append("<el-input v-model=\"query.").append(name).append("\" placeholder=\"请输入").append(column.remark()).append("\" @keyup.enter.native=\"search\" size=\"mini\" clearable style=\"width: 90%\"/>\n")
                         .append("</el-form-item>");
@@ -58,7 +59,7 @@ public class Vue {
         }
         sb.append("<el-form-item>\n" +
                 "<el-button @click=\"search(1)\" size=\"mini\" type=\"primary\" icon=\"el-icon-search\">查询</el-button>\n" +
-                "<el-button @click=\"reset('query')\" size=\"mini\" type=\"primary\" icon=\"el-icon-search\">重置</el-button>\n" +
+                "<el-button @click=\"reset('query')\" size=\"mini\" type=\"primary\" icon=\"el-icon-refresh\">重置</el-button>\n" +
                 "</el-form-item>");
         sb.append("</el-form>");
         sb.append("</div>");
@@ -106,7 +107,7 @@ public class Vue {
             if (field.isAnnotationPresent(Column.class)) {
                 column = field.getAnnotation(Column.class);
                 fieldName = field.getName();
-                if (column.isAutoIncrement() || !"createTime".equals(fieldName) && !"updateTime".equals(fieldName)) {
+                if (!column.isAutoIncrement() || !"createTime".equals(fieldName) && !"updateTime".equals(fieldName)) {
                     remark = column.remark();
                     sb.append("<el-form-item label=\"").append(remark).append("\" prop=\"").append(fieldName).append("\">\n").append("<el-input v-model=\"").append(camel).append(".").append(fieldName).append("\" placeholder=\"请输入").append(remark).append("\" size=\"small\" style=\"width: 75%\"/>\n").append("</el-form-item>");
                 }
@@ -134,7 +135,7 @@ public class Vue {
             if (field.isAnnotationPresent(Column.class)) {
                 column = field.getAnnotation(Column.class);
                 fieldName = field.getName();
-                if (column.isAutoIncrement() || !"createTime".equals(fieldName) && !"updateTime".equals(fieldName)) {
+                if (!column.isAutoIncrement() || !"createTime".equals(fieldName) && !"updateTime".equals(fieldName)) {
                     remark = column.remark();
                     sb.append("<el-form-item label=\"").append(remark).append("\" prop=\"").append(fieldName).append("\">\n").append("<el-input v-model=\"").append(camel).append(".").append(fieldName).append("\" placeholder=\"请输入").append(remark).append("\" size=\"small\" style=\"width: 75%\"/>\n").append("</el-form-item>");
                 }
@@ -156,7 +157,7 @@ public class Vue {
         Column column;
         String fieldName, remark;
         sb.append("data() {return {");
-        sb.append("query: {\n" + "pageNum: 1,\n" + "pageSize: 7\n" + "},\n" + "total: 0,\n").append(camel).append(": {},\n")
+        sb.append("query: {\n" + "pageNum: 1,\n" + "pageSize: 11\n" + "},\n" + "total: 0,\n").append(camel).append(": {},\n")
                 .append("loading: true,\ninsertDialog: false,\nupdateDialog :false,\n")
                 .append("tableData:[],\nmultipleSelection: [],\n").append("rules:{");
         for (Field field : fields) {

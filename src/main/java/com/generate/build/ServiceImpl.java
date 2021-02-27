@@ -45,6 +45,7 @@ public class ServiceImpl {
 
     public static void insert(String name, String lowerCase, StringBuilder sb) {
         sb.append("    @Override\n");
+        sb.append("    @Transactional(rollbackFor = Exception.class)\n");
         sb.append("    public boolean insert").append(name).append("(").append(name).append(" bean) {\n");
         sb.append("        return ").append(lowerCase).append("Dao.insert").append(lowerCase).append("(bean) > 0;\n");
         sb.append("    }\n\n");
@@ -52,6 +53,7 @@ public class ServiceImpl {
 
     public static void update(String name, String lowerCase, StringBuilder sb) {
         sb.append("    @Override\n");
+        sb.append("    @Transactional(rollbackFor = Exception.class)\n");
         sb.append("    public boolean update").append(name).append("(").append(name).append(" bean) {\n");
         sb.append("        return ").append(lowerCase).append("Dao.update").append(lowerCase).append("(bean) > 0;\n");
         sb.append("    }\n\n");
@@ -59,10 +61,12 @@ public class ServiceImpl {
 
     public static void delete(String name, String lowerCase, StringBuilder sb) {
         sb.append("    @Override\n");
+        sb.append("    @Transactional(rollbackFor = Exception.class)\n");
         sb.append("    public boolean delete").append(name).append("(").append(name).append(" bean) {\n");
         sb.append("        return ").append(lowerCase).append("Dao.delete").append(lowerCase).append("(bean) > 0;\n");
         sb.append("    }\n\n");
         sb.append("    @Override\n");
+        sb.append("    @Transactional(rollbackFor = Exception.class)\n");
         sb.append("    public boolean deleteList").append("(List<").append(name).append("> list) {\n");
         sb.append("        int count = ").append(lowerCase).append("Dao.deleteList(list);\n");
         sb.append("        return list.size() == count;\n");

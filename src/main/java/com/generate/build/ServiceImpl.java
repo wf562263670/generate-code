@@ -12,7 +12,7 @@ public class ServiceImpl {
     public static void write(String name, String path) {
         StringBuilder sb = new StringBuilder();
         String lowerCase = name.toLowerCase(Locale.ROOT);
-        File file = new File(path + ("/" + name + "Service.java"));
+        File file = new File(path + ("/" + name + "ServiceImpl.java"));
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             basic(name, lowerCase, sb);
             byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);

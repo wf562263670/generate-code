@@ -5,25 +5,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 public class Dao {
 
-    public static void write(String pack,String path, Map<String, Object> map) {
-        String name = map.get("name").toString();
-        path += name + "Dao.java";
-        File file = new File(path);
+    public static void write(String name, String path) {
+        StringBuilder sb = new StringBuilder();
+        File file = new File(path + ("/" + name + "Dao.java"));
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("package ").append(pack).append(".dao;\n\n");
-            sb.append("import ").append(map.get("class")).append(";\n\n");
-            sb.append("public interface ").append(name).append("Dao {\n\n");
-            selectOne(name, sb);
-            selectList(name, sb);
-            insert(name, sb);
-            update(name, sb);
-            delete(name, sb);
-            sb.append("}");
+            basic(name, sb);
             byte[] data = sb.toString().getBytes(StandardCharsets.UTF_8);
             outputStream.write(data);
         } catch (IOException e) {
@@ -31,55 +20,35 @@ public class Dao {
         }
     }
 
-    public static void selectOne(String name, StringBuilder sb) {
-        sb.append("    /**\n" +
-                "     * selectOne\n" +
-                "     * 查询单个\n" +
-                "     */\n");
-        sb.append("    ").append(name).append(" get").append(name).append("(").append(name).append(" bean);\n\n");
+    public static void basic(String name, StringBuilder sb) {
+        sb.append("public interface ").append(name).append("Dao {\n\n");
+        list(name, sb);
+        get(name, sb);
+        insert(name, sb);
+        update(name, sb);
+        delete(name, sb);
+        sb.append("}");
     }
 
-    public static void selectList(String name, StringBuilder sb) {
-        sb.append("    /**\n" +
-                "     * selectList\n" +
-                "     * 查询列表\n" +
-                "     */\n");
-        sb.append("    List<").append(name).append("> get").append(name).append("List(").append(name).append(" bean);\n\n");
+    public static void list(String name, StringBuilder sb) {
         sb.append("    List<").append(name).append("> getList();\n\n");
     }
 
+    public static void get(String name, StringBuilder sb) {
+        sb.append("    ").append(name).append(" get").append(name).append("(").append(name).append(" bean);\n\n");
+    }
+
     public static void insert(String name, StringBuilder sb) {
-        sb.append("    /**\n" +
-                "     * insert\n" +
-                "     * 添加\n" +
-                "     */\n");
-        sb.append("    int").append(" insert").append(name).append("(").append(name).append(" bean);\n\n");
+        sb.append("    int add").append(name).append("(").append(name).append(" bean);\n\n");
     }
 
     public static void update(String name, StringBuilder sb) {
-        sb.append("    /**\n" +
-                "     * update\n" +
-                "     * 修改\n" +
-                "     */\n");
-        sb.append("    int").append(" update").append(name).append("(").append(name).append(" bean);\n\n");
+        sb.append("    int update").append(name).append("(").append(name).append(" bean);\n\n");
     }
 
     public static void delete(String name, StringBuilder sb) {
-        sb.append("    /**\n" +
-                "     * delete\n" +
-                "     * 删除\n" +
-                "     */\n");
-        sb.append("    int").append(" delete").append(name).append("(").append(name).append(" bean);\n\n");
-        sb.append("    /**\n" +
-                "     * delete\n" +
-                "     * 删除单个\n" +
-                "     */\n");
-        sb.append("    int").append(" delete").append(name).append("ById(").append(name).append(" bean);\n\n");
-        sb.append("    /**\n" +
-                "     * deleteList\n" +
-                "     * 批量删除\n" +
-                "     */\n");
-        sb.append("    int").append(" delete").append(name).append("List(List<").append(name).append("> list);\n\n");
+        sb.append("    int delete").append(name).append("(").append(name).append(" bean);\n\n");
+        sb.append("    int deleteList").append("(List<").append(name).append("> list);\n\n");
     }
 
 }

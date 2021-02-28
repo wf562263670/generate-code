@@ -46,9 +46,4 @@ public class Service {
         sb.append("    boolean deleteList").append("(List<").append(name).append("> list);\n\n");
     }
 
-    public static void main(String[] args) {
-        String path = "F:\\Git\\generate-code\\src\\main\\java\\com\\generate\\test";
-        String name = "User";
-        write(name, path);
-    }
 }
